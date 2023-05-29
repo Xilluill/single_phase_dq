@@ -1,0 +1,839 @@
+******************************************************************************
+                  TI ARM Linker PC v20.2.5                     
+******************************************************************************
+>> Linked Sun May 14 14:09:47 2023
+
+OUTPUT FILE NAME:   <single_phase_dq.out>
+ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 000047d5
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+  FLASH                 00000000   00040000  00004da0  0003b260  R  X
+  SRAM                  20000000   00008000  00002c44  000053bc  RW X
+
+
+SEGMENT ALLOCATION MAP
+
+run origin  load origin   length   init length attrs members
+----------  ----------- ---------- ----------- ----- -------
+00000000    00000000    00004da8   00004da8    r-x
+  00000000    00000000    0000026c   0000026c    r-- .intvecs
+  00000270    00000270    00004808   00004808    r-x .text
+  00004a78    00004a78    00000284   00000284    r-- .const
+  00004d00    00004d00    000000a8   000000a8    r-- .cinit
+20000000    20000000    00002c48   00000000    rw-
+  20000000    20000000    0000026c   00000000    rw- .vtable
+  20000270    20000270    00001000   00000000    rw- .stack
+  20001270    20001270    00001000   00000000    rw- .sysmem
+  20002270    20002270    000006d8   00000000    rw- .data
+  20002948    20002948    00000300   00000000    rw- .bss
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.intvecs   0    00000000    0000026c     
+                  00000000    0000026c     tm4c123gh6pz_startup_ccs.obj (.intvecs)
+
+.text      0    00000270    00004808     
+                  00000270    000012b8     main.obj (.text)
+                  00001528    00000d50     LCD12864_rom_enable.obj (.text)
+                  00002278    00000800     IQmathLib.lib : IQtables.obj (.text:isqrt_table)
+                  00002a78    000004d2     blue.obj (.text)
+                  00002f4a    00000006     driverlib.lib : sysctl.obj (.text:SysCtlDelay)
+                  00002f50    00000240     IQ_TOOLS.obj (.text)
+                  00003190    00000206     bus_fpga.obj (.text)
+                  00003396    000001b6     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_add_t2.asm.obj (.text)
+                  0000354c    00000004     driverlib.lib : timer.obj (.text:TimerIntClear)
+                  00003550    000001a8     ADS8688_TIVA_FPGA.obj (.text)
+                  000036f8    0000016c     driverlib.lib : gpio.obj (.text:GPIOPadConfigSet)
+                  00003864    00000158     rtsv7M4_T_le_v4SPD16_eabi.lib : e_sqrt.c.obj (.text:sqrt)
+                  000039bc    00000004     driverlib.lib : uart.obj (.text:UARTIntClear)
+                  000039c0    00000142     Txiang_utools.obj (.text)
+                  00003b02    00000136     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_div_t2.asm.obj (.text)
+                  00003c38    00000118     driverlib.lib : sysctl.obj (.text:SysCtlClockGet)
+                  00003d50    000000fc     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_mul_t2.asm.obj (.text)
+                  00003e4c    000000f4     driverlib.lib : sysctl.obj (.text:SysCtlClockSet)
+                  00003f40    000000e4     rtsv7M4_T_le_v4SPD16_eabi.lib : memory.c.obj (.text:free)
+                  00004024    0000009c                                   : memcpy_t2.asm.obj (.text)
+                  000040c0    00000090     IQmathLib.lib : IQNdiv.obj (.text:_IQ15div)
+                  00004150    00000090                   : IQNdiv.obj (.text:_IQ20div)
+                  000041e0    0000007a     rtsv7M4_T_le_v4SPD16_eabi.lib : memset_t2.asm.obj (.text)
+                  0000425a    0000006e                                   : fd_tos_t2.asm.obj (.text)
+                  000042c8    0000006c     IQmathLib.lib : IQNsqrt.obj (.text:_IQ20sqrt)
+                  00004334    00000068     driverlib.lib : flash.obj (.text:FlashProgram)
+                  0000439c    00000068                   : interrupt.obj (.text:IntEnable)
+                  00004404    00000068     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
+                  0000446c    00000060     driverlib.lib : timer.obj (.text:TimerConfigure)
+                  000044cc    0000004c                   : gpio.obj (.text:GPIOPinConfigure)
+                  00004518    0000004c                   : timer.obj (.text:_TimerIntNumberGet)
+                  00004564    00000048     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_toi_t2.asm.obj (.text)
+                  000045ac    00000046     driverlib.lib : uart.obj (.text:UARTConfigSetExpClk)
+                  000045f2    00000002     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.c.obj (.text:_nop)
+                  000045f4    00000044                                   : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
+                  00004638    00000044                                   : fd_tou_t2.asm.obj (.text)
+                  0000467c    00000040     driverlib.lib : uart.obj (.text:_UARTIntNumberGet)
+                  000046bc    00000040     rtsv7M4_T_le_v4SPD16_eabi.lib : ll_tofd_t2.asm.obj (.text)
+                  000046fc    00000038                                   : fs_tod_t2.asm.obj (.text)
+                  00004734    00000036                                   : ull_tofs_t2.asm.obj (.text)
+                  0000476a    00000002     --HOLE-- [fill = 0]
+                  0000476c    00000034     driverlib.lib : interrupt.obj (.text:IntRegister)
+                  000047a0    00000034                   : sysctl.obj (.text:SysCtlPeripheralEnable)
+                  000047d4    00000034     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.text:_c_int00_noargs:_c_int00_noargs)
+                  00004808    00000030     driverlib.lib : flash.obj (.text:FlashErase)
+                  00004838    0000002e     rtsv7M4_T_le_v4SPD16_eabi.lib : i_tofd_t2.asm.obj (.text)
+                  00004866    0000002c     driverlib.lib : gpio.obj (.text:GPIODirModeSet)
+                  00004892    00000002     --HOLE-- [fill = 0]
+                  00004894    00000028     rtsv7M4_T_le_v4SPD16_eabi.lib : memory.c.obj (.text:free_list_insert)
+                  000048bc    00000020     driverlib.lib : uart.obj (.text:UARTDisable)
+                  000048dc    00000020     rtsv7M4_T_le_v4SPD16_eabi.lib : u_tofd_t2.asm.obj (.text)
+                  000048fc    0000001c                                   : memory.c.obj (.text:free_list_remove)
+                  00004918    0000001a     tm4c123gh6pz_startup_ccs.obj (.text)
+                  00004932    00000018     driverlib.lib : timer.obj (.text:TimerIntRegister)
+                  0000494a    00000018                   : uart.obj (.text:UARTIntRegister)
+                  00004962    00000016                   : gpio.obj (.text:GPIOPinTypeUART)
+                  00004978    00000014                   : uart.obj (.text:UARTEnable)
+                  0000498c    00000012                   : timer.obj (.text:TimerLoadSet)
+                  0000499e    00000002     --HOLE-- [fill = 0]
+                  000049a0    00000010                   : fpu.obj (.text:FPUEnable)
+                  000049b0    00000010                   : fpu.obj (.text:FPULazyStackingEnable)
+                  000049c0    00000010                   : interrupt.obj (.text:IntMasterEnable)
+                  000049d0    00000010     IQmathLib.lib : IQNmpy.obj (.text:_IQ20mpy)
+                  000049e0    0000000e     driverlib.lib : timer.obj (.text:TimerEnable)
+                  000049ee    0000000e                   : uart.obj (.text:UARTCharGetNonBlocking)
+                  000049fc    0000000e                   : uart.obj (.text:UARTCharsAvail)
+                  00004a0a    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  00004a18    0000000c     driverlib.lib : cpu.obj (.text:CPUcpsie)
+                  00004a24    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init)
+                  00004a30    0000000a     driverlib.lib : uart.obj (.text:UARTCharPut)
+                  00004a3a    0000000a                   : uart.obj (.text:UARTFIFODisable)
+                  00004a44    0000000a                   : uart.obj (.text:UARTIntStatus)
+                  00004a4e    00000008                   : timer.obj (.text:TimerIntEnable)
+                  00004a56    00000008                   : uart.obj (.text:UARTBusy)
+                  00004a5e    00000008                   : uart.obj (.text:UARTIntEnable)
+                  00004a66    00000002     --HOLE-- [fill = 0]
+                  00004a68    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : errno.c.obj (.text:__aeabi_errno_addr)
+                  00004a70    00000004                                   : pre_init.c.obj (.text:_system_pre_init)
+                  00004a74    00000004                                   : exit.c.obj (.text:abort:abort)
+
+.const     0    00004a78    00000284     
+                  00004a78    00000090     driverlib.lib : gpio.obj (.const:g_pui32GPIOBaseAddrs)
+                  00004b08    0000006c                   : sysctl.obj (.const:g_pui32Xtals)
+                  00004b74    00000060                   : timer.obj (.const:g_ppui32TimerIntMap)
+                  00004bd4    00000004     --HOLE-- [fill = 0]
+                  00004bd8    00000048     LCD12864_rom_enable.obj (.const:numtab)
+                  00004c20    00000040     driverlib.lib : timer.obj (.const:g_ppui32TimerIntMapSnowflake)
+                  00004c60    00000040                   : uart.obj (.const:g_ppui32UARTIntMap)
+                  00004ca0    00000040                   : uart.obj (.const:g_ppui32UARTIntMapSnowflake)
+                  00004ce0    00000014                   : interrupt.obj (.const:g_pui32EnRegs)
+                  00004cf4    00000008     LCD12864_rom_enable.obj (.const:.string:linetab)
+
+.cinit     0    00004d00    000000a8     
+                  00004d00    00000070     (.cinit..data.load) [load image, compression = lzss]
+                  00004d70    0000000c     (__TI_handler_table)
+                  00004d7c    00000004     --HOLE-- [fill = 0]
+                  00004d80    00000008     (.cinit..bss.load) [load image, compression = zero_init]
+                  00004d88    00000008     (.cinit..vtable.load) [load image, compression = zero_init]
+                  00004d90    00000018     (__TI_cinit_table)
+
+.init_array 
+*          0    00000000    00000000     UNINITIALIZED
+
+.vtable    0    20000000    0000026c     UNINITIALIZED
+                  20000000    0000026c     driverlib.lib : interrupt.obj (.vtable)
+
+.stack     0    20000270    00001000     UNINITIALIZED
+                  20000270    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.stack)
+                  20000274    00000ffc     --HOLE--
+
+.sysmem    0    20001270    00001000     UNINITIALIZED
+                  20001270    00000010     rtsv7M4_T_le_v4SPD16_eabi.lib : memory.c.obj (.sysmem)
+                  20001280    00000ff0     --HOLE--
+
+.data      0    20002270    000006d8     UNINITIALIZED
+                  20002270    00000200     blue.obj (.data:buffer1)
+                  20002470    00000200     blue.obj (.data:buffer2)
+                  20002670    00000200     blue.obj (.data:buffer3)
+                  20002870    0000008c     main.obj (.data)
+                  200028fc    00000024     main.obj (.data:paremeter)
+                  20002920    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.c.obj (.data:$O1$$)
+                  20002928    00000008                                   : memory.c.obj (.data:$O1$$)
+                  20002930    00000008     main.obj (.data:model_func_pointer)
+                  20002938    00000005     blue.obj (.data)
+                  2000293d    00000003     --HOLE--
+                  20002940    00000004     IQ_TOOLS.obj (.data)
+                  20002944    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : errno.c.obj (.data)
+
+.bss       0    20002948    00000300     UNINITIALIZED
+                  20002948    000000d0     (.common:I_data)
+                  20002a18    000000d0     (.common:U_data)
+                  20002ae8    00000030     (.common:d_loop)
+                  20002b18    00000030     (.common:q_loop)
+                  20002b48    00000030     (.common:vsi_loop)
+                  20002b78    0000002c     (.common:udc_mean)
+                  20002ba4    00000008     (.common:I_alpha_beta)
+                  20002bac    00000008     (.common:I_in_U)
+                  20002bb4    00000008     (.common:U_alpha_beta)
+                  20002bbc    00000008     (.common:U_in_U)
+                  20002bc4    00000008     (.common:U_out_alpha_beta)
+                  20002bcc    00000008     (.common:U_out_dq)
+                  20002bd4    00000008     (.common:theta)
+                  20002bdc    00000004     (.common:I_now)
+                  20002be0    00000004     (.common:I_pop)
+                  20002be4    00000004     (.common:U_now)
+                  20002be8    00000004     (.common:U_pop)
+                  20002bec    00000004     (.common:ch1)
+                  20002bf0    00000004     (.common:ch4)
+                  20002bf4    00000004     (.common:ch5)
+                  20002bf8    00000004     (.common:cons_0_387)
+                  20002bfc    00000004     (.common:cons_100)
+                  20002c00    00000004     (.common:cons_10_24)
+                  20002c04    00000004     (.common:cons_37_55)
+                  20002c08    00000004     (.common:cons_512)
+                  20002c0c    00000004     (.common:cons_56_32)
+                  20002c10    00000004     (.common:cons_5_12)
+                  20002c14    00000004     (.common:cons_65535)
+                  20002c18    00000004     (.common:cons_idref)
+                  20002c1c    00000004     (.common:cons_iqref)
+                  20002c20    00000004     (.common:cons_u_b)
+                  20002c24    00000004     (.common:cons_u_k)
+                  20002c28    00000004     (.common:cons_w_L)
+                  20002c2c    00000004     (.common:monitorData1)
+                  20002c30    00000004     (.common:monitorData2)
+                  20002c34    00000004     (.common:monitorData3)
+                  20002c38    00000004     (.common:monitorData4)
+                  20002c3c    00000004     (.common:u_out_final)
+                  20002c40    00000004     (.common:ubus_s)
+                  20002c44    00000004     (.common:udc)
+
+__llvm_prf_cnts 
+*          0    20000000    00000000     UNINITIALIZED
+
+MODULE SUMMARY
+
+       Module                         code    ro data   rw data
+       ------                         ----    -------   -------
+    .\
+       main.obj                       4792    0         936    
+       LCD12864_rom_enable.obj        3408    80        0      
+       blue.obj                       1234    0         1557   
+       tm4c123gh6pz_startup_ccs.obj   26      620       0      
+       IQ_TOOLS.obj                   576     0         4      
+       bus_fpga.obj                   518     0         0      
+       ADS8688_TIVA_FPGA.obj          424     0         0      
+       Txiang_utools.obj              322     0         0      
+    +--+------------------------------+-------+---------+---------+
+       Total:                         11300   700       2497   
+                                                               
+    ../IQmath/ccs/IQmathLib/Debug/IQmathLib.lib
+       IQtables.obj                   0       2048      0      
+       IQNdiv.obj                     288     0         0      
+       IQNsqrt.obj                    108     0         0      
+       IQNmpy.obj                     16      0         0      
+    +--+------------------------------+-------+---------+---------+
+       Total:                         412     2048      0      
+                                                               
+    C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/ccs/Debug/driverlib.lib
+       interrupt.obj                  172     20        620    
+       sysctl.obj                     582     108       0      
+       gpio.obj                       506     144       0      
+       uart.obj                       288     128       0      
+       timer.obj                      240     160       0      
+       flash.obj                      152     0         0      
+       fpu.obj                        32      0         0      
+       cpu.obj                        12      0         0      
+    +--+------------------------------+-------+---------+---------+
+       Total:                         1984    560       620    
+                                                               
+    C:\ti\ccs1110\ccs\tools\compiler\ti-cgt-arm_20.2.5.LTS\lib\rtsv7M4_T_le_v4SPD16_eabi.lib
+       fd_add_t2.asm.obj              438     0         0      
+       e_sqrt.c.obj                   344     0         0      
+       fd_div_t2.asm.obj              310     0         0      
+       memory.c.obj                   296     0         8      
+       fd_mul_t2.asm.obj              252     0         0      
+       memcpy_t2.asm.obj              156     0         0      
+       memset_t2.asm.obj              122     0         0      
+       fd_tos_t2.asm.obj              110     0         0      
+       copy_decompress_lzss.c.obj     104     0         0      
+       fd_toi_t2.asm.obj              72      0         0      
+       autoinit.c.obj                 68      0         0      
+       fd_tou_t2.asm.obj              68      0         0      
+       ll_tofd_t2.asm.obj             64      0         0      
+       fs_tod_t2.asm.obj              56      0         0      
+       ull_tofs_t2.asm.obj            54      0         0      
+       boot_cortex_m.c.obj            52      0         0      
+       i_tofd_t2.asm.obj              46      0         0      
+       u_tofd_t2.asm.obj              32      0         0      
+       copy_decompress_none.c.obj     14      0         0      
+       copy_zero_init.c.obj           12      0         0      
+       errno.c.obj                    8       0         4      
+       _lock.c.obj                    2       0         8      
+       exit.c.obj                     4       0         0      
+       pre_init.c.obj                 4       0         0      
+    +--+------------------------------+-------+---------+---------+
+       Total:                         2688    0         20     
+                                                               
+       Heap:                          0       0         4096   
+       Stack:                         0       0         4096   
+       Linker Generated:              0       164       0      
+    +--+------------------------------+-------+---------+---------+
+       Grand Total:                   16384   3472      11329  
+
+
+LINKER GENERATED COPY TABLES
+
+__TI_cinit_table @ 00004d90 records: 3, size/record: 8, table size: 24
+	.data: load addr=00004d00, load size=00000070 bytes, run addr=20002270, run size=000006d8 bytes, compression=lzss
+	.bss: load addr=00004d80, load size=00000008 bytes, run addr=20002948, run size=00000300 bytes, compression=zero_init
+	.vtable: load addr=00004d88, load size=00000008 bytes, run addr=20000000, run size=0000026c bytes, compression=zero_init
+
+
+LINKER GENERATED HANDLER TABLE
+
+__TI_handler_table @ 00004d70 records: 3, size/record: 4, table size: 12
+	index: 0, handler: __TI_zero_init
+	index: 1, handler: __TI_decompress_lzss
+	index: 2, handler: __TI_decompress_none
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address   name                          
+-------   ----                          
+000032d1  BUS_Init                      
+00004a75  C$$EXIT                       
+00004a19  CPUcpsie                      
+00002241  DispChar5x8                   
+00002209  DispClear                     
+000021e1  DispClear_line                
+00001bb9  DispExtern16x16               
+00002139  DispFloat                     
+00001fc1  DispFloat5x8                  
+00001e99  DispFloat8x16                 
+00001df9  DispNumber5x8                 
+00001d59  DispNumber8x16                
+00001d11  DispString5x8                 
+00001c31  Disp_GB2312_string_16x16      
+00000b59  Display                       
+00001c01  Display_128x64                
+000049a1  FPUEnable                     
+000049b1  FPULazyStackingEnable         
+00004809  FlashErase                    
+00004335  FlashProgram                  
+00002ab9  Float2Str                     
+00004867  GPIODirModeSet                
+000036f9  GPIOPadConfigSet              
+000044cd  GPIOPinConfigure              
+00004963  GPIOPinTypeUART               
+00003231  IORD                          
+00003191  IOWR                          
+20002ba4  I_alpha_beta                  
+20002948  I_data                        
+20002bac  I_in_U                        
+20002bdc  I_now                         
+20002be0  I_pop                         
+0000439d  IntEnable                     
+000049c1  IntMasterEnable               
+0000476d  IntRegister                   
+00000f21  KeyToControl                  
+000013d1  PID                           
+00003159  PID_Q_step                    
+00003131  PID_init_Q                    
+00000d41  ReadKey                       
+00004919  ResetISR                      
+00003c39  SysCtlClockGet                
+00003e4d  SysCtlClockSet                
+00002f4b  SysCtlDelay                   
+000047a1  SysCtlPeripheralEnable        
+00001501  Timer0IntHandler              
+00001301  Timer1AIntHandler             
+0000446d  TimerConfigure                
+000049e1  TimerEnable                   
+0000354d  TimerIntClear                 
+00004a4f  TimerIntEnable                
+00004933  TimerIntRegister              
+0000498d  TimerLoadSet                  
+00002d09  UART1IntHandler               
+00004a57  UARTBusy                      
+000049ef  UARTCharGetNonBlocking        
+00004a31  UARTCharPut                   
+000049fd  UARTCharsAvail                
+000045ad  UARTConfigSetExpClk           
+000048bd  UARTDisable                   
+00004979  UARTEnable                    
+00004a3b  UARTFIFODisable               
+000039bd  UARTIntClear                  
+00004a5f  UARTIntEnable                 
+0000494b  UARTIntRegister               
+00004a45  UARTIntStatus                 
+00002f11  UARTStringPut                 
+20002bb4  U_alpha_beta                  
+20002a18  U_data                        
+20002bbc  U_in_U                        
+20002be4  U_now                         
+20002bc4  U_out_alpha_beta              
+20002bcc  U_out_dq                      
+20002be8  U_pop                         
+000040c1  _IQ15div                      
+00004151  _IQ20div                      
+000049d1  _IQ20mpy                      
+000042c9  _IQ20sqrt                     
+20001270  __STACK_END                   
+00001000  __STACK_SIZE                  
+20000470  __STACK_TOP                   
+00001000  __SYSMEM_SIZE                 
+00004d90  __TI_CINIT_Base               
+00004da8  __TI_CINIT_Limit              
+00004d70  __TI_Handler_Table_Base       
+00004d7c  __TI_Handler_Table_Limit      
+000045f5  __TI_auto_init_nobinit_nopinit
+00004405  __TI_decompress_lzss          
+00004a0b  __TI_decompress_none          
+ffffffff  __TI_pprof_out_hndl           
+ffffffff  __TI_prof_data_size           
+ffffffff  __TI_prof_data_start          
+00000000  __TI_static_base__            
+00004a25  __TI_zero_init                
+0000425b  __aeabi_d2f                   
+00004565  __aeabi_d2iz                  
+00004639  __aeabi_d2uiz                 
+000033a1  __aeabi_dadd                  
+00003b03  __aeabi_ddiv                  
+00003d51  __aeabi_dmul                  
+00003397  __aeabi_dsub                  
+00004a69  __aeabi_errno_addr            
+000046fd  __aeabi_f2d                   
+00004839  __aeabi_i2d                   
+000046bd  __aeabi_l2d                   
+000041e1  __aeabi_memclr                
+000041e1  __aeabi_memclr4               
+000041e1  __aeabi_memclr8               
+00004025  __aeabi_memcpy                
+00004025  __aeabi_memcpy4               
+00004025  __aeabi_memcpy8               
+000041e3  __aeabi_memset                
+000041e3  __aeabi_memset4               
+000041e3  __aeabi_memset8               
+000048dd  __aeabi_ui2d                  
+00004735  __aeabi_ul2f                  
+ffffffff  __binit__                     
+ffffffff  __c_args__                    
+UNDEFED   __mpu_init                    
+20000270  __stack                       
+20000000  __start___llvm_prf_cnts       
+20000000  __stop___llvm_prf_cnts        
+000047d5  _c_int00_noargs               
+20002920  _lock                         
+000045f3  _nop                          
+20001270  _sys_memory                   
+UNDEFED   _system_post_cinit            
+00004a71  _system_pre_init              
+20002924  _unlock                       
+200028e4  a                             
+200028e8  a_last                        
+000030f9  abc2alpha_beta                
+00004a75  abort                         
+200028c4  adj                           
+00003079  alpha_beta2dq                 
+20002940  alpha_beta_L                  
+00003049  ave_queue_push                
+00003011  ave_queue_sum                 
+200028b8  b1                            
+ffffffff  binit                         
+00002f01  blue1                         
+00002ef1  blue2                         
+00002ee1  blue3                         
+00002ed1  blue4                         
+20002270  buffer1                       
+20002470  buffer2                       
+20002670  buffer3                       
+20002bec  ch1                           
+20002bf0  ch4                           
+20002bf4  ch5                           
+2000293c  charget                       
+20002bf8  cons_0_387                    
+20002bfc  cons_100                      
+20002c00  cons_10_24                    
+20002c04  cons_37_55                    
+20002c08  cons_512                      
+20002c0c  cons_56_32                    
+20002c10  cons_5_12                     
+20002c14  cons_65535                    
+20002c18  cons_idref                    
+20002c1c  cons_iqref                    
+20002c20  cons_u_b                      
+20002c24  cons_u_k                      
+20002c28  cons_w_L                      
+20002898  d_kd                          
+20002894  d_ki                          
+20002890  d_kp                          
+20002ae8  d_loop                        
+20002938  debug_count                   
+00001bb9  display_graphic_16x16         
+00001b89  display_graphic_5x8           
+00001b41  display_graphic_8x16          
+00001aa9  display_vertical_line         
+00000271  doADC                         
+00002fd9  dq2alpha_beta                 
+200028f4  duty_0                        
+200028ec  duty_i1                       
+200028f0  duty_u2                       
+20002944  errno                         
+200028c0  fhz                           
+200028bc  fhz_last                      
+00003ae9  float_ave_init                
+00003ab1  float_ave_step                
+00003f41  free                          
+20000000  g_pfnRAMVectors               
+00000000  g_pfnVectors                  
+00002d69  getStringFVT                  
+000036b1  getVoltage                    
+00003609  getVoltageMean                
+00003551  getVoltageRMS                 
+00001a19  get_and_write_16x16           
+00001999  get_and_write_5x8             
+00001909  get_and_write_8x16            
+200028d0  i_rms                         
+20002880  i_set                         
+20002884  idref                         
+000009f9  init                          
+00002c79  initialize_uart               
+200028c8  iq_test_f                     
+20002888  iqref                         
+00002278  isqrt_table                   
+200028b4  k1                            
+200028f8  key_flag                      
+200028e0  keydat                        
+200028e1  keydat_last                   
+00001689  lcd12864_init                 
+000015d9  lcd_write_com                 
+00001529  lcd_write_data                
+00004cf4  linetab                       
+00001041  main                          
+00004025  memcpy                        
+000041e9  memset                        
+20002870  mode_flag                     
+20002930  model_func_pointer            
+20002c2c  monitorData1                  
+20002c30  monitorData2                  
+20002c34  monitorData3                  
+20002c38  monitorData4                  
+00002a79  num_pow                       
+00004bd8  numtab                        
+200028fc  paremeter                     
+000008a9  paremeter_add                 
+00000841  paremeter_choose_add          
+200028d8  paremeter_choose_flag         
+000007d9  paremeter_choose_sub          
+00000621  paremeter_display             
+200028dc  paremeter_flag                
+000005b9  paremeter_group_add           
+200028d4  paremeter_group_flag          
+00000549  paremeter_group_sub           
+00000439  paremeter_sub                 
+2000288c  pid_flag                      
+00002bc9  printCharFVT                  
+00002ba9  printStringFVT                
+20002874  protect_flag                  
+200028a4  q_kd                          
+200028a0  q_ki                          
+2000289c  q_kp                          
+20002b18  q_loop                        
+00002fb9  queue_clear                   
+00002f89  queue_pop                     
+00002f51  queue_push                    
+00003a71  read_float_from_flash         
+00003a39  read_int_from_flash           
+00000391  rest                          
+00002bd9  sentdata                      
+00003865  sqrt                          
+00003865  sqrtl                         
+20002bd4  theta                         
+20002878  time_flag                     
+20002c3c  u_out_final                   
+200028cc  u_rms                         
+20002c40  ubus_s                        
+2000287c  ubus_set                      
+20002c44  udc                           
+20002b78  udc_mean                      
+200028b0  vsi_kd                        
+200028ac  vsi_ki                        
+200028a8  vsi_kp                        
+20002b48  vsi_loop                      
+000039e1  write_float_to_flash          
+000039c1  write_int_to_flash            
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address   name                          
+-------   ----                          
+00000000  __TI_static_base__            
+00000000  g_pfnVectors                  
+00000271  doADC                         
+00000391  rest                          
+00000439  paremeter_sub                 
+00000549  paremeter_group_sub           
+000005b9  paremeter_group_add           
+00000621  paremeter_display             
+000007d9  paremeter_choose_sub          
+00000841  paremeter_choose_add          
+000008a9  paremeter_add                 
+000009f9  init                          
+00000b59  Display                       
+00000d41  ReadKey                       
+00000f21  KeyToControl                  
+00001000  __STACK_SIZE                  
+00001000  __SYSMEM_SIZE                 
+00001041  main                          
+00001301  Timer1AIntHandler             
+000013d1  PID                           
+00001501  Timer0IntHandler              
+00001529  lcd_write_data                
+000015d9  lcd_write_com                 
+00001689  lcd12864_init                 
+00001909  get_and_write_8x16            
+00001999  get_and_write_5x8             
+00001a19  get_and_write_16x16           
+00001aa9  display_vertical_line         
+00001b41  display_graphic_8x16          
+00001b89  display_graphic_5x8           
+00001bb9  DispExtern16x16               
+00001bb9  display_graphic_16x16         
+00001c01  Display_128x64                
+00001c31  Disp_GB2312_string_16x16      
+00001d11  DispString5x8                 
+00001d59  DispNumber8x16                
+00001df9  DispNumber5x8                 
+00001e99  DispFloat8x16                 
+00001fc1  DispFloat5x8                  
+00002139  DispFloat                     
+000021e1  DispClear_line                
+00002209  DispClear                     
+00002241  DispChar5x8                   
+00002278  isqrt_table                   
+00002a79  num_pow                       
+00002ab9  Float2Str                     
+00002ba9  printStringFVT                
+00002bc9  printCharFVT                  
+00002bd9  sentdata                      
+00002c79  initialize_uart               
+00002d09  UART1IntHandler               
+00002d69  getStringFVT                  
+00002ed1  blue4                         
+00002ee1  blue3                         
+00002ef1  blue2                         
+00002f01  blue1                         
+00002f11  UARTStringPut                 
+00002f4b  SysCtlDelay                   
+00002f51  queue_push                    
+00002f89  queue_pop                     
+00002fb9  queue_clear                   
+00002fd9  dq2alpha_beta                 
+00003011  ave_queue_sum                 
+00003049  ave_queue_push                
+00003079  alpha_beta2dq                 
+000030f9  abc2alpha_beta                
+00003131  PID_init_Q                    
+00003159  PID_Q_step                    
+00003191  IOWR                          
+00003231  IORD                          
+000032d1  BUS_Init                      
+00003397  __aeabi_dsub                  
+000033a1  __aeabi_dadd                  
+0000354d  TimerIntClear                 
+00003551  getVoltageRMS                 
+00003609  getVoltageMean                
+000036b1  getVoltage                    
+000036f9  GPIOPadConfigSet              
+00003865  sqrt                          
+00003865  sqrtl                         
+000039bd  UARTIntClear                  
+000039c1  write_int_to_flash            
+000039e1  write_float_to_flash          
+00003a39  read_int_from_flash           
+00003a71  read_float_from_flash         
+00003ab1  float_ave_step                
+00003ae9  float_ave_init                
+00003b03  __aeabi_ddiv                  
+00003c39  SysCtlClockGet                
+00003d51  __aeabi_dmul                  
+00003e4d  SysCtlClockSet                
+00003f41  free                          
+00004025  __aeabi_memcpy                
+00004025  __aeabi_memcpy4               
+00004025  __aeabi_memcpy8               
+00004025  memcpy                        
+000040c1  _IQ15div                      
+00004151  _IQ20div                      
+000041e1  __aeabi_memclr                
+000041e1  __aeabi_memclr4               
+000041e1  __aeabi_memclr8               
+000041e3  __aeabi_memset                
+000041e3  __aeabi_memset4               
+000041e3  __aeabi_memset8               
+000041e9  memset                        
+0000425b  __aeabi_d2f                   
+000042c9  _IQ20sqrt                     
+00004335  FlashProgram                  
+0000439d  IntEnable                     
+00004405  __TI_decompress_lzss          
+0000446d  TimerConfigure                
+000044cd  GPIOPinConfigure              
+00004565  __aeabi_d2iz                  
+000045ad  UARTConfigSetExpClk           
+000045f3  _nop                          
+000045f5  __TI_auto_init_nobinit_nopinit
+00004639  __aeabi_d2uiz                 
+000046bd  __aeabi_l2d                   
+000046fd  __aeabi_f2d                   
+00004735  __aeabi_ul2f                  
+0000476d  IntRegister                   
+000047a1  SysCtlPeripheralEnable        
+000047d5  _c_int00_noargs               
+00004809  FlashErase                    
+00004839  __aeabi_i2d                   
+00004867  GPIODirModeSet                
+000048bd  UARTDisable                   
+000048dd  __aeabi_ui2d                  
+00004919  ResetISR                      
+00004933  TimerIntRegister              
+0000494b  UARTIntRegister               
+00004963  GPIOPinTypeUART               
+00004979  UARTEnable                    
+0000498d  TimerLoadSet                  
+000049a1  FPUEnable                     
+000049b1  FPULazyStackingEnable         
+000049c1  IntMasterEnable               
+000049d1  _IQ20mpy                      
+000049e1  TimerEnable                   
+000049ef  UARTCharGetNonBlocking        
+000049fd  UARTCharsAvail                
+00004a0b  __TI_decompress_none          
+00004a19  CPUcpsie                      
+00004a25  __TI_zero_init                
+00004a31  UARTCharPut                   
+00004a3b  UARTFIFODisable               
+00004a45  UARTIntStatus                 
+00004a4f  TimerIntEnable                
+00004a57  UARTBusy                      
+00004a5f  UARTIntEnable                 
+00004a69  __aeabi_errno_addr            
+00004a71  _system_pre_init              
+00004a75  C$$EXIT                       
+00004a75  abort                         
+00004bd8  numtab                        
+00004cf4  linetab                       
+00004d70  __TI_Handler_Table_Base       
+00004d7c  __TI_Handler_Table_Limit      
+00004d90  __TI_CINIT_Base               
+00004da8  __TI_CINIT_Limit              
+20000000  __start___llvm_prf_cnts       
+20000000  __stop___llvm_prf_cnts        
+20000000  g_pfnRAMVectors               
+20000270  __stack                       
+20000470  __STACK_TOP                   
+20001270  __STACK_END                   
+20001270  _sys_memory                   
+20002270  buffer1                       
+20002470  buffer2                       
+20002670  buffer3                       
+20002870  mode_flag                     
+20002874  protect_flag                  
+20002878  time_flag                     
+2000287c  ubus_set                      
+20002880  i_set                         
+20002884  idref                         
+20002888  iqref                         
+2000288c  pid_flag                      
+20002890  d_kp                          
+20002894  d_ki                          
+20002898  d_kd                          
+2000289c  q_kp                          
+200028a0  q_ki                          
+200028a4  q_kd                          
+200028a8  vsi_kp                        
+200028ac  vsi_ki                        
+200028b0  vsi_kd                        
+200028b4  k1                            
+200028b8  b1                            
+200028bc  fhz_last                      
+200028c0  fhz                           
+200028c4  adj                           
+200028c8  iq_test_f                     
+200028cc  u_rms                         
+200028d0  i_rms                         
+200028d4  paremeter_group_flag          
+200028d8  paremeter_choose_flag         
+200028dc  paremeter_flag                
+200028e0  keydat                        
+200028e1  keydat_last                   
+200028e4  a                             
+200028e8  a_last                        
+200028ec  duty_i1                       
+200028f0  duty_u2                       
+200028f4  duty_0                        
+200028f8  key_flag                      
+200028fc  paremeter                     
+20002920  _lock                         
+20002924  _unlock                       
+20002930  model_func_pointer            
+20002938  debug_count                   
+2000293c  charget                       
+20002940  alpha_beta_L                  
+20002944  errno                         
+20002948  I_data                        
+20002a18  U_data                        
+20002ae8  d_loop                        
+20002b18  q_loop                        
+20002b48  vsi_loop                      
+20002b78  udc_mean                      
+20002ba4  I_alpha_beta                  
+20002bac  I_in_U                        
+20002bb4  U_alpha_beta                  
+20002bbc  U_in_U                        
+20002bc4  U_out_alpha_beta              
+20002bcc  U_out_dq                      
+20002bd4  theta                         
+20002bdc  I_now                         
+20002be0  I_pop                         
+20002be4  U_now                         
+20002be8  U_pop                         
+20002bec  ch1                           
+20002bf0  ch4                           
+20002bf4  ch5                           
+20002bf8  cons_0_387                    
+20002bfc  cons_100                      
+20002c00  cons_10_24                    
+20002c04  cons_37_55                    
+20002c08  cons_512                      
+20002c0c  cons_56_32                    
+20002c10  cons_5_12                     
+20002c14  cons_65535                    
+20002c18  cons_idref                    
+20002c1c  cons_iqref                    
+20002c20  cons_u_b                      
+20002c24  cons_u_k                      
+20002c28  cons_w_L                      
+20002c2c  monitorData1                  
+20002c30  monitorData2                  
+20002c34  monitorData3                  
+20002c38  monitorData4                  
+20002c3c  u_out_final                   
+20002c40  ubus_s                        
+20002c44  udc                           
+ffffffff  __TI_pprof_out_hndl           
+ffffffff  __TI_prof_data_size           
+ffffffff  __TI_prof_data_start          
+ffffffff  __binit__                     
+ffffffff  __c_args__                    
+ffffffff  binit                         
+UNDEFED   __mpu_init                    
+UNDEFED   _system_post_cinit            
+
+[262 symbols]

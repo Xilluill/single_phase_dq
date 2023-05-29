@@ -1,0 +1,346 @@
+
+
+/**
+ * main.c
+ */
+#include "common.h"
+
+// #include "SPLL_LIB.h"
+#include "bus_fpga.h"
+#include "rectfier.h"
+#include "utils.h"
+#include "pid.h"
+#include "inc/hw_adc.h"
+#include "driverlib/adc.h"
+#define u32 unsigned int
+int ch0,ch1,ch3,ch4,ch5,ch6,ch7,ch2;
+int udc0,udc1,udc2,udc3,udc4,udc5,udc6,udc7,udcmean;
+float urms;
+long long int p1,p2,p3;
+int cnt;
+long long int P;
+ABC U3s;
+ABC I3s;
+Alpha_Beta U2s;
+Alpha_Beta I2s;
+D_Q I2r;
+Theta theta;
+PI_CONTROLER I_loop;
+PI_CONTROLER U_loop_d;
+PI_CONTROLER U_loop_q;
+PI_CONTROLER_F I_loop_F;
+PI_CONTROLER_F U_loop_d_F;
+PI_CONTROLER_F U_loop_q_F;
+Alpha_Beta wave_alpha_beta;
+D_Q wave_dq;
+Wave wave;
+int timer;
+int Udc;
+float Uref=55;
+int w1,w2,w3;
+int rec_enable = 0;
+char key_value,key_value_old;
+int flag;
+int watchtable[2048]={0};
+int index;
+float duty = 0.3;
+struct pid buck;
+struct pid bucki;
+float ubuck;
+float ibuck;
+float delta;
+int pid_buck_enable;
+int pid_buck_i_enable;
+float id_offset;
+float PF=1;
+uint32_t i4096;
+void DispFloat(int row,int col,float data,int len1,int len2);
+void Display();
+void Display()
+{
+    DispNumber5x8(1,1,ch5,5,1);
+    DispNumber5x8(2,1,ch4,5,1);
+    DispNumber5x8(3,1,ch3,5,1);
+    DispNumber5x8(4,1,ch7,5,1);
+    DispNumber5x8(5,1,ch0,5,1);
+    DispNumber5x8(6,1,ch1,5,1);
+    DispNumber5x8(7,1,ch2,5,1);
+    DispNumber5x8(8,1,ch6,5,1);
+    DispNumber5x8(8,50,(int)urms,5,1);
+    if(rec_enable)
+        DispString5x8(1,50,"wave",1);
+    else
+        DispString5x8(1,50,"    ",1);
+    DispString5x8(2,50,"uref:",1);
+    DispFloat(2,80,Uref,2,2);
+    DispString5x8(3,50,"duty:",1);
+    DispNumber5x8(3,80,(int)((1-duty)*100),2,1);
+    DispString5x8(4,50,"PF:",1);
+    DispFloat(4,80,id_offset,1,3);
+    DispString5x8(5,50,"I:",1);
+    DispFloat(5,80,ibuck,1,3);
+    if(pid_buck_enable)
+        DispString5x8(6,80,"CV",1);
+    else
+        DispString5x8(6,80,"  ",1);
+    if(pid_buck_i_enable)
+        DispString5x8(7,80,"CC",1);
+    else
+        DispString5x8(7,80,"  ",1);
+
+}
+void Timer0AIntHandler();
+void Timer0AIntHandler() //15K
+{
+    TimerIntClear(TIMER0_BASE,TIMER_TIMA_TIMEOUT);
+    //sample voltage and current
+    ch0 = IORD(CS1,2);
+    ch1 = IORD(CS1,3);
+    ch3 = IORD(CS1,5);
+    ch4 = IORD(CS1,4);
+    ch5 = IORD(CS1,6);
+    ch6 = IORD(CS1,0);
+    ch7 = IORD(CS1,1);
+    ch2 = IORD(CS1,7);
+
+    flag = !flag;
+    GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_0, flag);
+    GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_1, flag);
+
+    if(rec_enable){
+        // index = (index+1)%2048;
+        // watchtable[index] = I2r.d>>10;
+    U3s.a = _IQ5(fix_mpy(32768-ch5,fix_IQ(202.772277)));
+    I3s.a = _IQ5(fix_mpy(ch4-32768,fix_IQ(17.089453)));
+    U3s.b = _IQ5(fix_mpy(32768-ch3,fix_IQ(202.772277)));
+    I3s.b = _IQ5(fix_mpy(ch7-32768,fix_IQ(17.089453)));
+    U3s.c = _IQ5(fix_mpy(32768-ch0,fix_IQ(202.772277)));//ch0
+    I3s.c = _IQ5(fix_mpy(ch1-32768,fix_IQ(17.089453)));//ch1
+    Udc = _IQ5(fix_mpy(ch2-32768,fix_IQ(102.4)));//ch6
+    udc7 = udc6;
+    udc6 = udc5;
+    udc5 = udc4;
+    udc4 = udc3;
+    udc3 = udc2;
+    udc2 = udc1;
+    udc1 = udc0;
+    udc0 = Udc;
+    //8times
+    udcmean = _IQdiv8(udc7+udc6+udc5+udc4+udc3+udc2+udc1+udc0);
+
+    abc2alpha_beta(&U3s,&U2s);
+    abc2alpha_beta(&I3s,&I2s);
+    alpha_beta2dq(&I2s,&U2s,&theta,&I2r);
+    //current loop
+    PI_step(&I_loop,fix_IQ(Uref)-udcmean);
+    //voltage loop
+    PI_step(&U_loop_d,fix_IQ(id_offset)-I2r.d);
+    PI_step(&U_loop_q,-I_loop.ylf-I2r.q);
+
+
+    wave_dq.d = -U_loop_d.ylf;
+    wave_dq.q = -U_loop_q.ylf;
+    dq2alpha_beta(&wave_dq,&theta,&wave_alpha_beta);
+    alpha_beta2wave(Udc,&wave_alpha_beta,&wave);
+
+    //wave data transform
+    if(wave.w1<fix_IQ(25))
+        w1 = 25;
+    else if(wave.w1>fix_IQ(1000))
+        w1 = 1000;
+    else
+        w1 = wave.w1>>20;
+    if(wave.w2<fix_IQ(25))
+        w2 = 25;
+    else if(wave.w2>fix_IQ(1000))
+        w2 = 1000;
+    else
+        w2 = wave.w2>>20;
+    if(wave.w3<fix_IQ(25))
+        w3 = 25;
+    else if(wave.w3>fix_IQ(1000))
+        w3 = 1000;
+    else
+        w3 = wave.w3>>20;
+    //send to FPGA
+    IOWR(CS0,0,w1);
+    IOWR(CS1,0,w2);
+    IOWR(CS2,0,w3);}
+    IOWR(CS3,0,!rec_enable);
+    IOWR(CS4,0,duty*5000);
+}
+void Timer1AIntHandler();
+void Timer1AIntHandler()
+{
+    TimerIntClear(TIMER1_BASE,TIMER_TIMA_TIMEOUT);
+    p1 = IORD(CS1,8);
+    p2 = IORD(CS1,9);
+    p3 = IORD(CS1,10);
+    cnt = IORD(CS1,11);
+    key_value = read_key();
+
+    if(key_value!=key_value_old)
+    {
+        switch (key_value)
+        {
+        case 16:
+            rec_enable = !rec_enable;
+            PI_init(&I_loop,fix_IQ(0.05),fix_IQ(-0.04999),fix_IQ(10),fix_IQ(-10));
+            // PI_init(&I_loop,fix_IQ(0.1),fix_IQ(-0.09999),fix_IQ(100),fix_IQ(-100));
+            PI_init(&U_loop_d,fix_IQ(5),fix_IQ(-4.99993),fix_IQ(1023),fix_IQ(-1023));
+            PI_init(&U_loop_q,fix_IQ(5),fix_IQ(-4.99993),fix_IQ(1023),fix_IQ(-1023));
+            break;
+        case 1:
+            Uref=Uref+1;
+            break;
+        case 5:
+            Uref=Uref-1;
+            break;
+        case 2:
+            duty -= 0.05;
+            break;
+        case 6:
+            duty += 0.05;
+            break;
+        // case 3:
+        //     PF+=0.01;
+        //     break;
+        // case 7:
+        //     PF-=0.01;
+        //     break;
+        case 3:
+            id_offset+=0.1;
+            break;
+        case 7:
+            id_offset-=0.1;
+            break;
+        case 4:
+            id_offset += 0.01;
+            break;
+        case 8:
+            id_offset -= 0.01;
+        case 15:
+            pid_buck_enable = !pid_buck_enable;
+            break;
+        case 14:
+            pid_buck_i_enable = !pid_buck_i_enable;
+            break;
+        default:
+            break;
+        }
+    }
+    key_value_old = key_value;
+    if(pid_buck_enable&&pid_buck_i_enable)
+    {
+        pid_buck_enable = 0;
+        pid_buck_i_enable = 0;
+    }
+    duty = duty>0.5?0.5:(duty<0.1?0.1:duty);
+    PF = PF>1?1:(PF<0.9?0.9:PF);
+    id_offset = id_offset>2?2:(id_offset<0?0:id_offset);
+    // id_offset = -608.00311*PF*PF*PF+1673.31002*PF*PF-1543.42172*PF+478.33647;
+}
+
+void init();
+void init()
+{
+        SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+        SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
+        SysCtlClockSet(SYSCTL_SYSDIV_2_5|SYSCTL_USE_PLL|SYSCTL_XTAL_16MHZ|SYSCTL_OSC_MAIN);
+        HWREG(GPIO_PORTF_BASE + GPIO_O_LOCK) = GPIO_LOCK_KEY;
+        HWREG(GPIO_PORTF_BASE + GPIO_O_CR) |= GPIO_PIN_0;
+        HWREG(GPIO_PORTD_BASE + GPIO_O_LOCK) = GPIO_LOCK_KEY;
+        HWREG(GPIO_PORTD_BASE + GPIO_O_CR) |= GPIO_PIN_7;
+        PI_init(&I_loop,fix_IQ(0.1),fix_IQ(-0.09999),fix_IQ(10),fix_IQ(-10));
+        PI_init(&U_loop_d,fix_IQ(5),fix_IQ(-4.99993),fix_IQ(1023),fix_IQ(-1023));
+        PI_init(&U_loop_q,fix_IQ(5),fix_IQ(-4.99993),fix_IQ(1023),fix_IQ(-1023));
+        pid_init(&buck,36,0.02,0.01,0,-2,2);
+        pid_init(&bucki,2,0.4,0.01,0,-0.1,0.1);
+
+
+        lcd12864_init();
+        DispClear();
+        BUS_Init();
+        SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
+            SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
+            SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
+            GPIOPinTypeADC(GPIO_PORTB_BASE, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_5|GPIO_PIN_4);
+            GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_5|GPIO_PIN_4);
+            SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
+            while(!SysCtlPeripheralReady(SYSCTL_PERIPH_ADC0))
+                {
+                }
+            ADCSequenceConfigure(ADC0_BASE, 0, ADC_TRIGGER_PROCESSOR, 0);
+                ADCSequenceStepConfigure(ADC0_BASE, 0, 0,ADC_CTL_IE | ADC_CTL_END | ADC_CTL_CH9);
+                ADCSequenceEnable(ADC0_BASE, 0);
+            SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB); //使能外设
+                //使能GPIOF外设 PF1 PF2 PF3
+        GPIOPinTypeGPIOOutput(GPIO_PORTB_BASE,GPIO_PIN_0|GPIO_PIN_1);
+
+        SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
+
+        TimerConfigure(TIMER0_BASE,TIMER_CFG_PERIODIC | TIMER_CFG_A_PERIODIC);
+
+        TimerLoadSet(TIMER0_BASE,TIMER_A,SysCtlClockGet()/10000-1);    //20kHz
+
+        IntEnable(INT_TIMER0A);
+
+        TimerIntEnable(TIMER0_BASE,TIMER_TIMA_TIMEOUT);
+
+        TimerIntRegister(TIMER0_BASE,TIMER_A,Timer0AIntHandler);
+        TimerEnable(TIMER0_BASE,TIMER_A);
+
+        SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);
+
+        TimerConfigure(TIMER1_BASE,TIMER_CFG_PERIODIC | TIMER_CFG_A_PERIODIC);
+
+        TimerLoadSet(TIMER1_BASE,TIMER_A,SysCtlClockGet()/10-1);    //10Hz
+
+        IntEnable(INT_TIMER1A);
+
+        TimerIntEnable(TIMER1_BASE,TIMER_TIMA_TIMEOUT);
+
+        TimerIntRegister(TIMER1_BASE,TIMER_A,Timer1AIntHandler);
+        TimerEnable(TIMER1_BASE,TIMER_A);
+        IntMasterEnable();
+}
+int main(void)
+{
+    init();
+    while(1)
+    {
+        Display();
+        P = p1<<32;
+        P += p2<<16;
+        P += p3;
+        urms = sqrt(P/cnt);//urms = sqrt(P/cnt)*x.xxxx;
+        Uref = urms*0.01972-0.52084;
+        //Uref = ....
+        ubuck = ch6*0.003158-103.4732;
+        ibuck = i4096*0.000645;
+        if(pid_buck_enable)
+        {
+            pid_step(&buck,ubuck);
+            pid_error(&buck);
+            delta = pid_adjust(&buck);
+            duty -= delta;
+        }
+        if(pid_buck_i_enable)
+        {
+            pid_step(&bucki,ubuck);
+            pid_error(&bucki);
+            delta = pid_adjust(&bucki);
+            duty += delta;
+        }
+        ADCProcessorTrigger(ADC0_BASE, 0);
+            while(!ADCIntStatus(ADC0_BASE, 0, false))
+            {
+            }
+            //
+            // Read the value from the ADC.
+            //
+            ADCSequenceDataGet(ADC0_BASE, 0, &i4096);
+
+    }
+    return 0;
+}
